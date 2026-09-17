@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+
+  <!-- Hace que la web se adapte correctamente a móviles, tablets y PC -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Mi Link in Bio</title>
+
+  <!-- Bootstrap 5: sistema de estilos y componentes responsive -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <!-- Bootstrap Icons: iconos para redes sociales y botones -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+  >
+
+  <!--
+    ============================================================
+    ESTILOS PERSONALIZADOS
+    ============================================================
+    Bootstrap se encarga de la estructura y responsive.
+    Aquí añadimos únicamente el diseño propio de la plantilla.
+  -->
+  <style>
+    :root {
+      --accent: #ffffff;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, .72);
+      --button-bg: rgba(255, 255, 255, .13);
+      --button-border: rgba(255, 255, 255, .25);
+      --overlay: rgba(0, 0, 0, .42);
+      --blur: 14px;
+      --radius: 16px;
+    }
+
+    /* Fondo general de toda la página */
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% 0%, #3b3b3b 0%, #171717 42%, #050505 100%);
+      overflow-x: hidden;
+    }
+
+    /* Capa decorativa que oscurece ligeramente el fondo */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: var(--overlay);
+      pointer-events: none;
+    }
+
+    /* Contenedor principal */
+    .profile-container {
+      width: min(100%, 680px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 42px 20px 28px;
+    }
+
+    /* Cabecera del perfil */
+    .profile-header {
+      text-align: center;
+    }
+
+    /* Foto de perfil circular con marco */
+    .profile-image {
+      width: 190px;
+      height: 190px;
+      object-fit: contain;                              /* Foto completa, sin ampliar */
+      border-radius: 50%;                               /* Marco circular */
+      border: 3px solid rgba(255, 255, 255, .85);       /* Borde blanco */
+      background: radial-gradient(circle at 50% 45%, #262626 0%, #0d0d0d 80%);
+      box-shadow:
+        0 0 0 6px rgba(0, 0, 0, .45),                   /* Aro oscuro exterior */
+        0 12px 35px rgba(0, 0, 0, .55),                 /* Sombra de profundidad */
+        0 0 30px rgba(0, 188, 212, .12);                /* Halo cian muy sutil */
+      padding: 10px;                                    /* Aire entre borde y figura */
+      box-sizing: border-box;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    /* Efecto al pasar el ratón por encima */
+    .profile-image:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow:
+        0 0 0 6px rgba(0, 0, 0, .45),
+        0 16px 40px rgba(0, 0, 0, .65),
+        0 0 45px rgba(0, 188, 212, .25);
+    }
+
+    /* Nombre */
+    .profile-name {
+      margin-top: 18px;
+      margin-bottom: 7px;
+      font-size: clamp(1.45rem, 5vw, 2rem);
+      font-weight: 750;
+      letter-spacing: -.02em;
+    }
+
+    /* Texto con efecto de escritura */
+    .typing-wrapper {
+      min-height: 28px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      margin-left: 3px;
+      vertical-align: -2px;
+      background: currentColor;
+      animation: blink .75s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* Zona de enlaces */
+    .links {
+      margin-top: 30px;
+    }
+
+    /* Cada enlace de la página */
+    .bio-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      min-height: 58px;
+      margin-bottom: 14px;
+      padding: 14px 55px 14px 20px;
+
+      color: var(--text);
+      text-decoration: none;
+      text-align: center;
+      font-weight: 650;
+
+      background: var(--button-bg);
+      border: 1px solid var(--button-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+      transition:
+        transform .2s ease,
+        background-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    /* Efecto al pasar el ratón por encima */
+    .bio-link:hover {
+      color: var(--text);
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, .20);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .20);
+    }
+
+    /* Icono situado a la izquierda del enlace */
+    .bio-link .link-icon {
+      position: absolute;
+      left: 18px;
+      font-size: 1.25rem;
+    }
+
+    /* Botón de tres puntos situado a la derecha */
+    .bio-link .link-more {
+      position: absolute;
+      right: 18px;
+      opacity: .7;
+      font-size: 1.2rem;
+    }
+
+    /* Redes sociales */
+    .socials {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 25px;
+    }
+
+    .socials a {
+      color: var(--text);
+      font-size: 1.35rem;
+      opacity: .85;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+
+    .socials a:hover {
+      color: var(--text);
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    /* Pie de página */
+    footer {
+      margin-top: 30px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .82rem;
+    }
+
+    /* Modal de contacto */
+    .modal-content {
+      color: #111;
+      border: 0;
+      border-radius: 18px;
+    }
+
+    .modal-header {
+      border-bottom: 0;
+    }
+
+    /* En pantallas pequeñas reducimos un poco los espacios */
+    @media (max-width: 480px) {
+      .profile-container {
+        padding-top: 30px;
+      }
+
+      .profile-image {
+        width: 150px;
+        height: 150px;
+        padding: 8px;
+      }
+
+      .bio-link {
+        min-height: 54px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--
+    ============================================================
+    CONTENEDOR PRINCIPAL
+    ============================================================
+    Todo el contenido se mantiene centrado y limitado a 680 px
+    para que tenga el aspecto típico de una página "Link in Bio".
+  -->
+  <main class="profile-container">
+
+    <!-- ===================== PERFIL ===================== -->
+    <header class="profile-header">
+
+      <!--
+        FOTO DE PERFIL
+        Cambia la URL por la imagen que quieras utilizar.
+        Ejemplo:
+        src="assets/foto.jpg"
+      -->
+      <img
+        class="profile-image"
+        src="https://i.imgur.com/kPWClbu.png"
+        alt="Foto de perfil"
+      >
+
+      <!-- Nombre del propietario de la página -->
+      <h1 class="profile-name"> Abel Bernal</h1>
+
+      <!--
+        TEXTO ANIMADO
+        JavaScript cambiará automáticamente las frases.
+      -->
+      <div class="typing-wrapper">
+        <span id="typingText"></span><span class="cursor"></span>
+      </div>
+
+    </header>
+
+
+    <!-- ===================== ENLACES ===================== -->
+    <section class="links" aria-label="Enlaces principales">
+
+      <!--
+        BOTÓN DESTACADO: MI PORFOLIO
+        Color azul cian, primer botón de la lista.
+      -->
+      <a
+        class="bio-link"
+        href="https://abelber07.github.io/unknownuserr7.github.io/portfoli/"
+        style="background: #00bcd4; border-color: #00bcd4; color: #ffffff;"
+      >
+        <i class="bi- bi-briefcase link-icon" aria-hidden="true"></i>
+        <span>Mi Porfolio</span>
+        <i class="bi bi-three-dots link-more" aria-hidden="true"></i>
+      </a>
+
+      <!--
+        ENLACE 1
+        Puedes cambiar:
+        - href = destino
+        - icono = clase de Bootstrap Icons
+        - texto = nombre que verá el usuario
+      -->
+      <a class="bio-link" href="https://github.com/abelber07" target="_blank" rel="noopener">
+        <i class="bi bi-github link-icon" aria-hidden="true"></i>
+        <span>GitHub</span>
+        <i class="bi bi-three-dots link-more" aria-hidden="true"></i>
+      </a>
+
+      <!-- ENLACE 3 -->
+      <a class="bio-link" href="https://www.linkedin.com/" target="_blank" rel="noopener">
+        <i class="bi bi-linkedin link-icon" aria-hidden="true"></i>
+        <span>LinkedIn</span>
+        <i class="bi bi-three-dots link-more" aria-hidden="true"></i>
+      </a>
+
+      <!--
+        BOTÓN DE CONTACTO
+        En lugar de llevar a otra página, abre el formulario modal
+        que encontrarás al final del HTML.
+      -->
+      <a
+        class="bio-link"
+        href="#"
+        data-bs-toggle="modal"
+        data-bs-target="#contactModal"
+      >
+        <i class="bi bi-envelope link-icon" aria-hidden="true"></i>
+        <span>Contact Me</span>
+        <i class="bi bi-three-dots link-more" aria-hidden="true"></i>
+      </a>
+
+    </section>
+
+
+    <!-- ===================== REDES SOCIALES ===================== -->
+    <nav class="socials" aria-label="Redes sociales">
+
+      <!-- Cada icono es un enlace independiente -->
+      <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub">
+        <i class="bi bi-github"></i>
+      </a>
+
+      <a href="https://x.com/" target="_blank" rel="noopener" aria-label="X">
+        <i class="bi bi-twitter-x"></i>
+      </a>
+
+    </nav>
+
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer>
+      © 2026 - Mi Link in Bio
+    </footer>
+
+  </main>
+
+
+  <!--
+    ============================================================
+    MODAL DE CONTACTO
+    ============================================================
+    Bootstrap proporciona toda la funcionalidad de abrir/cerrar
+    el formulario sin tener que programar el modal desde cero.
+  -->
+  <div
+    class="modal fade"
+    id="contactModal"
+    tabindex="-1"
+    aria-labelledby="contactModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Cabecera del modal -->
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="contactModalLabel">
+            Contact Me 📨
+          </h2>
+
+          <!-- Botón X para cerrar -->
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Cerrar"
+          ></button>
+        </div>
+
+        <!-- Contenido del formulario -->
+        <div class="modal-body">
+
+          <!--
+            IMPORTANTE:
+            Este formulario solo representa el diseño.
+            Para recibir mensajes realmente necesitarás conectar
+            action="" con un backend o servicio de formularios.
+          -->
+          <form id="contactForm">
+
+            <div class="mb-3">
+              <label for="name" class="form-label">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Tu nombre"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="tu@email.com"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="subject" class="form-label">Asunto</label>
+              <input
+                type="text"
+                class="form-control"
+                id="subject"
+                placeholder="Asunto"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label for="message" class="form-label">Mensaje</label>
+              <textarea
+                class="form-control"
+                id="message"
+                rows="4"
+                placeholder="Escribe tu mensaje..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100">
+              Enviar mensaje
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!--
+    ============================================================
+    BOOTSTRAP JAVASCRIPT
+    ============================================================
+    Necesario para componentes interactivos como el Modal.
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <!--
+    ============================================================
+    JAVASCRIPT PERSONALIZADO
+    ============================================================
+    Aquí hacemos el efecto de escritura y el comportamiento
+    básico del formulario.
+  -->
+  <script>
+
+    /*
+      ==========================================================
+      EFECTO DE ESCRITURA
+      ==========================================================
+      Escribe y borra automáticamente las frases del array.
+    */
+
+    const phrases = [
+      "I'm a developer",
+      "I'm a designer",
+      "I'm a creator"
+    ];
+
+    const typingText = document.getElementById("typingText");
+
+    let phraseIndex = 0;
+    let characterIndex = 0;
+    let deleting = false;
+
+    function typeEffect() {
+
+      const currentPhrase = phrases[phraseIndex];
+
+      // Si estamos escribiendo, añadimos un carácter.
+      if (!deleting) {
+        typingText.textContent =
+          currentPhrase.substring(0, characterIndex + 1);
+
+        characterIndex++;
+
+        // Cuando terminamos una frase, esperamos antes de borrarla.
+        if (characterIndex === currentPhrase.length) {
+          deleting = true;
+
+          setTimeout(typeEffect, 1400);
+          return;
+        }
+
+      // Si estamos borrando, eliminamos un carácter.
+      } else {
+        typingText.textContent =
+          currentPhrase.substring(0, characterIndex - 1);
+
+        characterIndex--;
+
+        // Cuando se ha borrado toda la frase, pasamos a la siguiente.
+        if (characterIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+      }
+
+      // Velocidad de escritura/borrado.
+      setTimeout(typeEffect, deleting ? 45 : 80);
+    }
+
+    // Inicia el efecto de escritura.
+    typeEffect();
+
+
+    /*
+      ==========================================================
+      FORMULARIO
+      ==========================================================
+      Actualmente evitamos que la página se recargue.
+      Aquí puedes añadir posteriormente un fetch() a tu API,
+      PHP, Node.js, Formspree, Resend, etc.
+    */
+
+    document.getElementById("contactForm").addEventListener("submit", function(event) {
+
+      // Evita el envío tradicional del formulario.
+      event.preventDefault();
+
+      // Mensaje temporal de ejemplo.
+      alert("Formulario preparado. Conecta este formulario a tu backend para enviar el mensaje.");
+
+      // Limpia los campos después del envío.
+      this.reset();
+
+      // Cierra el modal.
+      const modalElement = document.getElementById("contactModal");
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal.hide();
+    });
+
+  </script>
+
+</body>
+</html>
